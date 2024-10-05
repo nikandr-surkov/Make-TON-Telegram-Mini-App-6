@@ -15,6 +15,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
   const [telegramId, setTelegramId] = useState<string | null>(null)
   const [channelUsername, setChannelUsername] = useState('')
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (window.Telegram?.WebApp) {
@@ -58,14 +59,17 @@ export default function Home() {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to check membership')
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to check membership')
       }
 
       const data = await response.json()
       setIsChannelMember(data.isMember)
+      setError(null)
     } catch (error) {
       console.error('Error checking channel membership:', error)
       setIsChannelMember(false)
+      setError(error instanceof Error ? error.message : 'An unknown error occurred')
     } finally {
       setIsLoading(false)
     }
@@ -97,6 +101,7 @@ export default function Home() {
       >
         {isLoading ? 'Checking...' : 'Check Membership'}
       </button>
+      {error && <p className="mt-4 text-red-500">{error}</p>}
       {isChannelMember !== null && !isLoading && (
         <p className="mt-4 text-xl">
           {isChannelMember
