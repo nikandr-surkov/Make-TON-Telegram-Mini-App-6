@@ -77,7 +77,7 @@ export default function Home() {
 
   if (!telegramId) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <main className="flex min-h-screen flex-col items-center justify-center p-4">
         <h1 className="text-4xl font-bold mb-8">Telegram Channel Membership Check</h1>
         <p className="text-xl">This app can only be used within Telegram as a Mini App.</p>
       </main>
